@@ -25,6 +25,7 @@ function loadPage() {
 }
 
 function createButton(key, parent, hash) {
+    // console.log(key, parent, parent[key], parent)
     const category = hash && parent[key];
     const categoryElement = document.createElement("a");
     categoryElement.style.width = hash ? "135px" : "135px";
@@ -33,7 +34,7 @@ function createButton(key, parent, hash) {
     hash && (categoryElement.onclick = () => navigator.clipboard.writeText(category));
     const img = document.createElement("img");
     img.title = img.alt = key;
-    img.src = icons[hash || key];
+    img.src = parent[key].icon || parent.icon || parent.Global.icon;
     img.style.width = "100%";
     categoryElement.append(img);
     const label = document.createElement("div");
@@ -63,11 +64,17 @@ function parseIcons(iframe) {
 
 // Parsing Bookmarks.html files
 function parseDL(dl) {
-    return Array.from(dl.children).map(dt => {
-        if (dt.querySelector('h3')) return [dt.querySelector("h3").innerText, parseDL(dt.querySelector("dl"))];
-        return [dt.innerText, decodeURI(dt.querySelector('a').href)];
-    }).reduce(function reduce(obj, [key, value]) {
-        obj[key] = Array.isArray(value) ? value.reduce(reduce, {}) : value;
+    console.log(dl)
+    const parsed = Array.from(dl.children).map(dt => {
+        if (dt.querySelector('h3')) return [dt.querySelector("h3").innerText, parseDL(dt.querySelector("dl")), dt.querySelector("a").getAttribute("icon")];
+        return [dt.innerText, decodeURI(dt.querySelector('a').href), dt.querySelector('a').getAttribute("icon")];
+    }).reduce(function reduce(obj, [key, value, icon]) {
+        console.log(key)
+        obj[key] = value;
+        typeof value == "object" && Object.defineProperty(obj[key], "icon", { value: icon });
         return obj;
     }, {});
+
+    // parsed.Global && Object.defineProperty(parsed, "icon", { value: parsed.Global.icon });
+    return parsed;
 }
