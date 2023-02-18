@@ -25,7 +25,6 @@ function loadPage() {
 }
 
 function createButton(key, parent, hash) {
-    // console.log(key, parent, parent[key], parent)
     const category = hash && parent[key];
     const categoryElement = document.createElement("a");
     categoryElement.style.width = hash ? "135px" : "135px";
@@ -64,12 +63,10 @@ function parseIcons(iframe) {
 
 // Parsing Bookmarks.html files
 function parseDL(dl) {
-    console.log(dl)
     const parsed = Array.from(dl.children).map(dt => {
         if (dt.querySelector('h3')) return [dt.querySelector("h3").innerText, parseDL(dt.querySelector("dl")), dt.querySelector("a").getAttribute("icon")];
         return [dt.innerText, decodeURI(dt.querySelector('a').href), dt.querySelector('a').getAttribute("icon")];
     }).reduce(function reduce(obj, [key, value, icon]) {
-        console.log(key)
         obj[key] = value;
         typeof value == "object" && Object.defineProperty(obj[key], "icon", { value: icon });
         return obj;
