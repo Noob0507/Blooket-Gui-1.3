@@ -1,3 +1,5 @@
+# [Back to main branch](https://github.com/Minesraft2/Blooket-Cheats)
+
 # ⚠️ IMPORTANT ⚠️
 If any cheats are not working, try copying them from the repo again, _then_ make an issue
 ## [Support Server](https://discord.gg/QerPBatcca)
